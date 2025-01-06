@@ -2,6 +2,8 @@
 
 This is a **Streamlit** application that provides a dashboard for visualizing YouTube channel analytics. It processes and displays data from a CSV file containing information about video performance, such as views, subscribers, likes, and watch time.
 
+[On Streamlit Cloud](https://youtube-dashboard-rb.streamlit.app/)
+
 ## Features
 - **Key Metrics Display**: Shows total views, subscribers, and the number of videos in the dataset.
 - **Data Preview**: Displays the first few rows of the processed data for quick inspection.
