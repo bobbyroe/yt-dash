@@ -1,6 +1,8 @@
 import streamlit as st
 import pandas as pd
 
+st.set_page_config(page_title="YouTube Dashboard", page_icon="🤖", layout="wide")
+
 st.title("🤖 Robot Bobby YouTube Dashboard")
 st.write("Welcome! Here are the latest stats for the Robot Bobby YouTube channel.")
 date_options_map = {
@@ -10,7 +12,9 @@ date_options_map = {
     "Year": "year.csv",
     "All Time": "all.csv"
 }
-date_range = st.selectbox("Select date", list(date_options_map.keys()))
+colL, colM, colR = st.columns(3)
+with colL:
+    date_range = st.selectbox("Select date", list(date_options_map.keys()))
 
 data = pd.read_csv(f'./data/{date_options_map[date_range]}')
 totals = data[data['Content'] == 'Total'] # get totals row
