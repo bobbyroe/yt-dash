@@ -1,3 +1,4 @@
+import json
 import streamlit as st
 import pandas as pd
 
@@ -5,6 +6,20 @@ st.set_page_config(page_title="YouTube Dashboard", page_icon="🤖", layout="wid
 
 st.title("🤖 Robot Bobby YouTube Dashboard")
 st.write("Welcome! Here are the latest stats for the Robot Bobby YouTube channel.")
+
+saved_state =  {
+    "date_option": "Week"
+}
+try: 
+    with open('./data/saved_state.json') as f:
+        saved_state = json.load(f)
+except FileNotFoundError:
+    st.error("Data file - saved_state.json - not found.")
+
+
+if "date_option" not in st.session_state:
+    st.session_state.date_option = saved_state['date_option']
+
 date_options_map = {
     "Week": "week.csv",
     "Month": "month.csv",
@@ -12,9 +27,34 @@ date_options_map = {
     "Year": "year.csv",
     "All Time": "all.csv"
 }
+def write_state():
+    with open('./data/saved_state.json', 'w') as f:
+        json.dump({"date_option": st.session_state.date_option}, f)
+
+# st.markdown(
+#     """
+#     <style>
+#     .centered-button {
+#         display: flex;
+#         justify-content: center;
+#         align-items: center;
+#         height: 100%; /* Full height for vertical alignment */
+#         border: 1px solid #555;
+#         border-radius: 10px;
+#         background: none;
+#         background-color: transparent;
+#     }
+#     </style>
+#     """,
+#     unsafe_allow_html=True,
+# )
 colL, colM, colR = st.columns(3)
 with colL:
-    date_range = st.selectbox("Select date", list(date_options_map.keys()))
+    date_range = st.selectbox("Select date", list(date_options_map.keys()), key="date_option")
+with colM:
+    # st.markdown('<div class="centered-button"><button>Save Selection</button></div>', unsafe_allow_html=True)
+    st.write("")
+    st.button("Save Selection", on_click=write_state)
 
 data = pd.read_csv(f'./data/{date_options_map[date_range]}')
 totals = data[data['Content'] == 'Total'] # get totals row
